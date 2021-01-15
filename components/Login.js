@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Loginstyles from '../styles/loginstyle';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+
 import {
   Ionicons,
   EvilIcons,
@@ -17,7 +18,11 @@ export default function Login({ navigation, login }) {
   };
   const [userdetail, setUser] = useState(initialValue);
   function handleInput(name, value) {
+    if (name == 'premium') {
+      console.log('hello');
+    }
     setUser({ ...userdetail, [name]: value });
+    console.log('hello');
   }
   function handleSubmit() {
     console.log('called');
@@ -28,7 +33,10 @@ export default function Login({ navigation, login }) {
         .where('password', '==', userdetail.password);
       isUser.get().then((data) => {
         if (data.size == 1) {
-          login();
+          data.forEach((val) => {
+            login(val.data().premium);
+          });
+
           console.log('state changed');
         } else {
           console.log('datasize' + data.size);
@@ -87,7 +95,7 @@ export default function Login({ navigation, login }) {
               style={Loginstyles.button}
               onPress={() => navigation.navigate('signUp')}
             >
-              <Text style={{ color: color }}>signUp</Text>
+              <Text>SignUp</Text>
             </TouchableOpacity>
           </Text>
         </View>
