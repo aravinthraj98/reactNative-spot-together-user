@@ -15,7 +15,7 @@ import Context from '../context';
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNav() {
-  const [login, isLogin] = useState(false);
+  const [login, isLogin] = useState(true);
   const [premium, isPremium] = useState(false);
 
   useEffect(() => {

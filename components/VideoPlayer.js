@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
 import { Video } from 'expo-av';
 // import {ScreenOrientation} from "expo"
 import VideoPlayer from 'expo-video-player';
@@ -8,16 +8,20 @@ import Loginstyles from '../styles/loginstyle';
 import firebase from '../firebase';
 import VideoScreen from './VideoScreen';
 import Context from '../context';
+import AudioScreen from './MusicScreen';
 const db = firebase.firestore();
 export default function Videoplayer({ route, navigation }) {
   const [datas, setData] = useState([]);
   const [video, setVideo] = useState({});
   const [screen, setScreen] = useState(false);
   const [context, setcontext] = useContext(Context);
-  useState(() => {
+  const [music, setMusic] = useState(false);
+  const [type, setType] = useState('music');
+  useEffect(() => {
+    setScreen(false);
     let db = firebase
       .firestore()
-      .collection('video')
+      .collection(type)
       .where('email', '==', route.params.email);
     db.get().then((data) => {
       let arrayValue = [];
@@ -42,12 +46,13 @@ export default function Videoplayer({ route, navigation }) {
       console.log(arrayValue.length);
       console.log('jj');
     });
-  }, []);
+  }, [type]);
   function ShowVideo(url, id, description, views, premium) {
     if (context == false && premium == true) {
       window.alert('premium users only');
       return;
     }
+
     console.log('Video playig');
     let videoClick = {
       id,
@@ -57,28 +62,39 @@ export default function Videoplayer({ route, navigation }) {
     };
     firebase
       .firestore()
-      .collection('video')
+      .collection(type)
       .where('id', '==', id)
       .get()
       .then((doc) => {
         doc.forEach((data) => {
           let newData = data.data();
           newData.views += 1;
-          db.collection('video').doc(data.id).set(newData);
+          db.collection(type).doc(data.id).set(newData);
           // db.collection("video").doc(data.i)
           // db.collection("video").
         });
       });
+
     setVideo(videoClick);
-    setScreen(true);
+    if (type == 'video') setScreen(true);
+    else setMusic(true);
   }
   return (
     <>
+      <View style={{ flexDirection: 'row', width: '100%' }}>
+        <View style={{ width: '49%', margin: 2 }}>
+          <Button title='music' onPress={() => setType('music')} />
+        </View>
+        <View style={{ width: '49%', margin: 2 }}>
+          <Button title='video' onPress={() => setType('video')} />
+        </View>
+      </View>
+      {music && <AudioScreen data={video} />}
       {screen && <VideoScreen data={video} />}
       <FlatList
         data={datas}
         style={Loginstyles.blackBackGround}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id + Math.random() * 10}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[

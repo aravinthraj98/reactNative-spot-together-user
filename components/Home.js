@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  LogBox,
   StyleSheet,
   Text,
   View,
   Image,
+  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import NavBar from '../components/topNav';
 import Loginstyles from '../styles/loginstyle';
 import firebase from '../firebase';
-import { Value } from 'react-native-reanimated';
-import { FlatList } from 'react-native-gesture-handler';
+
 const db = firebase.firestore();
 
 export default function Home({ navigation }) {
@@ -55,14 +54,14 @@ export default function Home({ navigation }) {
             return (
               <TouchableOpacity
                 style={{
-                  height: '30vh',
+                  height: '30%',
                   width: '45%',
                   margin: '2%',
                 }}
                 onPress={() => InsideChannel(item.email)}
               >
                 <Image
-                  style={{ width: '100%', height: '25vh' }}
+                  style={{ width: '100%', height: 100 }}
                   source={{
                     uri: item.logo,
                   }}

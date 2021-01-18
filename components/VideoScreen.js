@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Video } from 'expo-av';
 // import {ScreenOrientation} from "expo"
 
-import VideoPlayer from 'expo-video-player';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 import { Dimensions, View, Text } from 'react-native';
@@ -67,9 +66,9 @@ export default function VideoScreen(props) {
         ]}
       >
         <Text style={[{ padding: '3%', color: 'white' }]}>
-          description:  {props.data.description}
+          description: {props.data.description}
         </Text>
-        <Text style={{ color: 'grey', textAlign: 'right', alignSelf: 'right' }}>
+        <Text style={{ color: 'grey', textAlign: 'right' }}>
           Views:{props.data.views}
         </Text>
       </View>
